@@ -8,12 +8,14 @@
 #include "dbl-lnk-lst.hpp"
 using cust_coll::dbl_lnk_lst;
 
-static constexpr auto ITEM_NBR = 10;
+static constexpr auto ITEM_NBR = 10000;
 
 TEST(DblLnkListAssertions, EmptyConstructedState) {
+  srand( time(nullptr) );
   some_elm::prnt = false; // setting to true will print test strings to stdout console upon container destruction
-  dbl_lnk_lst<some_elm> lst{};
-  EXPECT_EQ(lst.size(), 0);
+                          // (best to set ITEM_NBR to 5 or 10 - certainly not 10,000 or will print to console all day)
+
+  dbl_lnk_lst<some_elm> lst{};  // <<=== dbl-lnk-list
   EXPECT_EQ(lst.size(), 0);
   EXPECT_TRUE(lst.is_empty());
 }
@@ -22,7 +24,7 @@ TEST(DblLnkListAssertions, InsertCopyAtHead) {
   std::vector<some_elm> strs{ITEM_NBR};
   EXPECT_EQ(strs.size(), ITEM_NBR);
   some_elm::count = 0;
-  dbl_lnk_lst<some_elm> lst{};
+  dbl_lnk_lst<some_elm> lst{};  // <<=== dbl-lnk-list
   for (const auto &elm: strs) {
     auto r = lst.insert(elm);
     EXPECT_TRUE(r);
@@ -47,7 +49,7 @@ TEST(DblLnkListAssertions, MoveInsertAtHead) {
   std::vector<some_elm> sav_strs{strs};
   EXPECT_EQ(sav_strs.size(), ITEM_NBR);
   some_elm::count = 0;
-  dbl_lnk_lst<some_elm> lst{};
+  dbl_lnk_lst<some_elm> lst{};  // <<=== dbl-lnk-list
   for (auto &elm: strs) {
     auto r = lst.insert(std::move(elm));
     EXPECT_TRUE(r);
@@ -71,7 +73,7 @@ TEST(DblLnkListAssertions, InsertCopyAtPos) {
   std::vector<some_elm> strs{ITEM_NBR};
   EXPECT_EQ(strs.size(), ITEM_NBR);
   some_elm::count = 0;
-  dbl_lnk_lst<some_elm> lst{};
+  dbl_lnk_lst<some_elm> lst{};  // <<=== dbl-lnk-list
   for (auto &elm: strs) {
     auto r = lst.insert(elm);
     EXPECT_TRUE(r);
@@ -100,7 +102,7 @@ TEST(DblLnkListAssertions, MoveInsertAtPos) {
   std::vector<some_elm> strs{ITEM_NBR};
   EXPECT_EQ(strs.size(), ITEM_NBR);
   some_elm::count = 0;
-  dbl_lnk_lst<some_elm> lst{};
+  dbl_lnk_lst<some_elm> lst{};  // <<=== dbl-lnk-list
   for (auto &elm: strs) {
     auto r = lst.insert(elm);
     EXPECT_TRUE(r);
@@ -130,7 +132,7 @@ TEST(DblLnkListAssertions, AppendCopyAtTail) {
   std::vector<some_elm> strs{ITEM_NBR};
   EXPECT_EQ(strs.size(), ITEM_NBR);
   some_elm::count = 0;
-  dbl_lnk_lst<some_elm> lst{};
+  dbl_lnk_lst<some_elm> lst{};  // <<=== dbl-lnk-list
   for (const auto &elm: strs) {
     auto r = lst.append(elm);
     EXPECT_TRUE(r);
@@ -155,7 +157,7 @@ TEST(DblLnkListAssertions, MoveAppendAtTail) {
   std::vector<some_elm> sav_strs{strs};
   EXPECT_EQ(sav_strs.size(), ITEM_NBR);
   some_elm::count = 0;
-  dbl_lnk_lst<some_elm> lst{};
+  dbl_lnk_lst<some_elm> lst{};  // <<=== dbl-lnk-list
   for (auto &elm: strs) {
     auto r = lst.append(std::move(elm));
     EXPECT_TRUE(r);
@@ -179,7 +181,7 @@ TEST(DblLnkListAssertions, AppendCopyAtPos) {
   std::vector<some_elm> strs{ITEM_NBR};
   EXPECT_EQ(strs.size(), ITEM_NBR);
   some_elm::count = 0;
-  dbl_lnk_lst<some_elm> lst{};
+  dbl_lnk_lst<some_elm> lst{};  // <<=== dbl-lnk-list
   for (auto &elm: strs) {
     auto r = lst.insert(elm);
     EXPECT_TRUE(r);
@@ -208,7 +210,7 @@ TEST(DblLnkListAssertions, MoveAppendAtPos) {
   std::vector<some_elm> strs{ITEM_NBR};
   EXPECT_EQ(strs.size(), ITEM_NBR);
   some_elm::count = 0;
-  dbl_lnk_lst<some_elm> lst{};
+  dbl_lnk_lst<some_elm> lst{};  // <<=== dbl-lnk-list
   for (auto &elm: strs) {
     auto r = lst.insert(elm);
     EXPECT_TRUE(r);
@@ -238,7 +240,7 @@ TEST(DblLnkListAssertions, DeleteAtPos) {
   std::vector<some_elm> strs{ITEM_NBR};
   EXPECT_EQ(strs.size(), ITEM_NBR);
   some_elm::count = 0;
-  dbl_lnk_lst<some_elm> lst{};
+  dbl_lnk_lst<some_elm> lst{};  // <<=== dbl-lnk-list
   for (const auto &elm: strs) {
     auto r = lst.insert(elm);
     EXPECT_TRUE(r);
@@ -260,4 +262,23 @@ TEST(DblLnkListAssertions, DeleteAtPos) {
   r = lst.delete_at(strs[9]);
   EXPECT_FALSE(r);
   EXPECT_EQ(lst.size(), ITEM_NBR - 3);
+}
+
+TEST(DblLnkListAssertions, ClearDblLnkListContainer) {
+  std::vector<some_elm> strs{ITEM_NBR};
+  EXPECT_EQ(strs.size(), ITEM_NBR);
+  some_elm::count = 0;
+  dbl_lnk_lst<some_elm> lst{};  // <<=== dbl-lnk-list
+  for (const auto &elm: strs) {
+    auto r = lst.append(elm);
+    EXPECT_TRUE(r);
+    some_elm::count += 1;
+  }
+  EXPECT_EQ(lst.size(), ITEM_NBR);
+  EXPECT_EQ(some_elm::count, ITEM_NBR);
+  EXPECT_EQ(lst.size(), strs.size());
+  lst.clear();
+  EXPECT_EQ(lst.size(), 0);
+  EXPECT_TRUE(lst.is_empty());
+  EXPECT_EQ(some_elm::count, 0);
 }

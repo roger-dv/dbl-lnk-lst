@@ -18,6 +18,9 @@ static inline char *rand_string(char *const str, size_t size) noexcept {
   return str;
 }
 
+/**
+ * A struct intended for unit testing; has encapsulated, random generated string.
+ */
 struct some_elm {
   static inline constinit int count = 0;
   static inline constinit bool prnt = true;

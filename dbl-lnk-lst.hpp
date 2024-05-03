@@ -18,6 +18,14 @@ namespace cust_coll {
     requires std::move_constructible<T>;
   };
 
+  /**
+   * A classic CS-101 doubly-linked-list container template, but with C++ flair.
+   *
+   * Supports forward and reverse iteration via begin()/end() and rbegin()/rend().
+   *
+   * @tparam T type of element contained by container - as constrained by
+   *           concept lst_elm_type_constraints (see above)
+   */
   template <typename T> requires lst_elm_type_constraints<T>
   class dbl_lnk_lst {
   protected:
@@ -43,7 +51,7 @@ namespace cust_coll {
     void append_at_position(const T&pos, lst_node<T> *node) noexcept;
   public:
     dbl_lnk_lst()  noexcept = default;
-    ~dbl_lnk_lst() noexcept = default;
+    ~dbl_lnk_lst() noexcept { clear(); }
     size_t size() const noexcept { return count; }
     bool is_empty() const noexcept { return count == 0; }
     bool insert(const T& item) noexcept;
@@ -55,6 +63,7 @@ namespace cust_coll {
     bool append_at(const T& item, const T&pos) noexcept;
     bool append_at(T &&item, const T&pos) noexcept;
     bool delete_at(const T&pos) noexcept;
+    void clear() noexcept;
 
     class iterator {
     public:
@@ -330,6 +339,25 @@ namespace cust_coll {
       }
     }
     return false;
+  }
+
+  /**
+   * Removes all items in container, freeing their memory.
+   * @tparam T item's type
+   */
+  template <typename T> requires lst_elm_type_constraints<T>
+  void dbl_lnk_lst<T>::clear() noexcept {
+    for (auto *node = tail; node != nullptr; node = bkwd(node)) {
+      if (node->next) {
+        node->next.reset(nullptr);
+        count--;
+      }
+    }
+    tail = nullptr;
+    if (head) {
+      head.reset(nullptr);
+      count--;
+    }
   }
 
 } // cust_coll
